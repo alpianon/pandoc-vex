@@ -1,0 +1,41 @@
+#!/usr/bin/python3
+#SPDX-License-Identifier: GPL-3.0-only
+#
+# Copyright (C) 2019 Alberto Pianon <pianon@array.eu>
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, version 3.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+import panflute as pf
+
+vex = []
+
+def action(elem, doc):
+    global vex
+    if isinstance(elem, pf.Header) and elem.attributes.get('vex'):
+        vex.append({
+            'id': elem.identifier,
+            'title': pf.stringify(elem)
+        })
+    elif isinstance(elem, pf.Cite) and pf.stringify(elem) == "@vex":
+        vex_list = [
+            "@{} ({})".format(v['id'], v['title'])
+            for v in vex
+        ]
+        vex_list_str = ", ".join(vex_list)
+        vex_list_pandoc = pf.convert_text(vex_list_str)
+        # convert_text returns a Para obj, copying its content in a Span obj
+        new_elem = pf.Span()
+        new_elem.content = vex_list_pandoc[0].content
+        return new_elem
+
+if __name__ == '__main__':
+    pf.toJSONFilter(action)
