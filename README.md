@@ -13,7 +13,7 @@ Filtro per pandoc per creare automaticamente una lista delle clausole vessatorie
 
 ## Sintassi
 
-Le clausole vessatorie vanno contrassegnate con l'attributo 'vex', cui basta dare un valore qualsiasi (1, true, ecc.), e alla fine nella formula ex art.1341-2 c.c. basta utilizzare `@vex` al posto dell'elenco delle clausole vessatorie. Ad esempio:
+Le clausole vessatorie vanno contrassegnate con un id univoco con prefisso `sec:` e con l'attributo 'vex', cui basta dare un valore qualsiasi (1, true, ecc.), e alla fine nella formula ex art.1341-2 c.c. basta utilizzare `@vex` al posto dell'elenco delle clausole vessatorie. Ad esempio:
 
 ```markdown
 ---
