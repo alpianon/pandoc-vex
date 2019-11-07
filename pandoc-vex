@@ -17,14 +17,35 @@
 import panflute as pf
 
 vex = []
+ris = []
 
 def action(elem, doc):
     global vex
+    global ris
     if isinstance(elem, pf.Header) and elem.attributes.get('vex'):
         vex.append({
             'id': elem.identifier,
             'title': pf.stringify(elem)
         })
+
+        if isinstance(elem, pf.Header) and elem.attributes.get('ris'):
+            ris.append({
+                'id': elem.identifier,
+                'title': pf.stringify(elem)
+            })
+
+    elif isinstance(elem, pf.Header) and elem.attributes.get('ris'):
+        ris.append({
+            'id': elem.identifier,
+            'title': pf.stringify(elem)
+        })
+
+        if isinstance(elem, pf.Header) and elem.attributes.get('vex'):
+            vex.append({
+            'id': elem.identifier,
+            'title': pf.stringify(elem)
+            })
+
     elif isinstance(elem, pf.Cite) and pf.stringify(elem) == "@vex":
         vex_list = [
             "@{} ({})".format(v['id'], v['title'])
@@ -37,5 +58,18 @@ def action(elem, doc):
         new_elem.content = vex_list_pandoc[0].content
         return new_elem
 
+    elif isinstance(elem, pf.Cite) and pf.stringify(elem) == "@ris":
+        ris_list = [
+            "@{} ({})".format(v['id'], v['title'])
+            for v in ris
+        ]
+        ris_list_str = ", ".join(ris_list)
+        ris_list_pandoc = pf.convert_text(ris_list_str)
+        # convert_text returns a Para obj, copying its content in a Span obj
+        new_elem = pf.Span()
+        new_elem.content = ris_list_pandoc[0].content
+        return new_elem
+
 if __name__ == '__main__':
     pf.toJSONFilter(action)
+    # pf.toJSONFilter(insert_clauses)
