@@ -1,6 +1,34 @@
 # pandoc-vex
 
->**Note** This pandoc filter is aimed at solving a specific problem related to the drafting of agreements subject to the Italian Law, so the remainder of this README will be in Italian language only.
+>**Note** This pandoc filter is aimed at solving a specific problem related to the drafting of agreements subject to the Italian Law, so the remainder of this README will be mainly in Italian language.
+
+# English
+
+This is a filter to create one or more lists of clauses in an agreement. Under Italian Law you are required to approve certain clauses in writing, but this could be used to create an arbitrary list of clauses, for instance, sections whose breach would cause immediata termination. It is used in a markdown agreement compiled with  pandoc and pandoc-crossref.
+
+## Install
+
+1. Install panflute: `sudo pip3 install panflute`
+2. Copy pandox-vex to a PATH directory and make it executable: `sudo cp pandoc-vex /usr/local/bin/ && sudo chmod +x /usr/local/bin/pandoc-vex`
+
+Syntax: Unique prefix  `sec:` e attribute `vex` *or* `ris` *or both*
+
+Any reference within the text of literal `@vex` and/or `@ris` will be replaced by a list of clauses (number + headings) which are marked with those attributes mentioned above.
+
+**Note**: all relevant headings must be *above* the reference, or they will be missed. So ideally those list must be at the end of the contract.
+
+## Use
+
+Must be in a cascade just before pandoc-crossref, such as in:
+
+```
+pandoc \
+  --filter=pandoc-vex \
+  --filter=pandoc-crossref \
+  contratto.md -o contratto.docx
+```
+
+# Italiano
 
 Filtro per pandoc per creare automaticamente una lista delle clausole vessatorie (da approvare specificamente per iscritto ex artt.1341-2 c.c.) alla fine di un contratto redatto in linguaggio markdown e compilato con pandoc e pandoc-crossref.
 
